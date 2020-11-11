@@ -8,7 +8,6 @@ import React, { useState } from 'react';
 import {
   StyleSheet,
   TextInput,
-  StatusBar,
   View,
   Text,
   ScrollView,
@@ -17,67 +16,51 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
 } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
-import Loader from '../Components/Loader';
-import Footer from '../Components/Footer';
+import Loader from '../components/Loader';
+import Footer from '../components/Footer';
 
-const LoginScreen = props => {
+import * as api from '../services/auth';
+import { useAuth } from '../provider'; 
+
+const LoginScreen: () => React$Node = ({navigation}) => {
   let [userEmail, setUserEmail] = useState('');
   let [userPassword, setUserPassword] = useState('');
   let [loading, setLoading] = useState(false);
   let [errortext, setErrortext] = useState('');
-
-  const handleSubmitPress = () => {
-    setErrortext('');
-    if (!userEmail) {
-      alert('Please fill Email');
-      return;
+  const { handleLogin } = useAuth();       
+       
+  async function handleSubmitPress() {    
+    try {
+      setErrortext('');      
+      if (!userEmail) {
+        alert('Please fill Email');
+        return;
+      }
+      if (!userPassword) {
+        alert('Please fill Password');
+        return;
+      }  
+      setLoading(true);
+      let response = await api.login({email: userEmail, password: userPassword});
+      await handleLogin(response);
+      
+      // If server response message same as Data Matched
+      if (response.user.isVerified == 't') {
+        navigation.navigate(Home); 
+      } else {
+        setErrortext('Please check your email id or password');
+        console.log('Please check your email id or password');
+      }
+      //Hide Loader
+      setLoading(false);
+    } catch(error) {
+      console.log(error);
+      throw new Error(error);
     }
-    if (!userPassword) {
-      alert('Please fill Password');
-      return;
-    }
-    setLoading(true);
-    
-    fetch('https://dashboard.qonteo.com/REST/login', {
-      method: 'POST',
-      body: JSON.stringify({ 
-        email: userEmail, password: userPassword
-      }),
-      headers: {
-        //Header Defination
-        'Accept': 'application/json',
-        'Content-Type': 'application/json;charset=UTF-8',
-      },
-    }).then(response => response.json())
-      .then(responseJson => {
-        //Hide Loader
-        setLoading(false);
-        console.log(responseJson);
-        // If server response message same as Data Matched
-        if (responseJson.status == 1) {
-          AsyncStorage.setItem('user_id', responseJson.data[0].user_id);
-          console.log(responseJson.data[0].user_id);
-          props.navigation.navigate('DrawerNavigationRoutes');
-        } else {
-          setErrortext('Please check your email id or password');
-          console.log('Please check your email id or password');
-        }
-      })
-      .catch(error => {
-        //Hide Loader
-        setLoading(false);
-        console.error(error);
-      });
   };
 
   return (
-    <View style={styles.mainBody}>
-      <StatusBar
-        backgroundColor='#292d83'
-        color='#effbf7'
-        barStyle="light-content"
-      />
+    <View style={styles.mainBody}>     
       <Loader loading={loading} />
 
       <ScrollView keyboardShouldPersistTaps="handled">
