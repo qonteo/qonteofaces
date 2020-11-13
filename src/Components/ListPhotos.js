@@ -46,7 +46,7 @@ export default class Photos extends PureComponent {
                         data={itemList}
                         renderItem={(data) => <ItemCard {...data.item} navigation={this.props.navigation} />}
                         keyExtractor={(item) => item.id} 
-                        style={{width: '100%'}}
+                        style={{width: '100%', height: '50%'}}
                    />                                        
         } else {
             return <ActivityIndicator />

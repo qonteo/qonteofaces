@@ -15,6 +15,7 @@ import {
 
 
 export default function Footer() {
+   
     return (
         <>
             <View style={styles.container}>

@@ -1,17 +1,48 @@
+//import React form react
 import React from 'react';
-import { SafeAreaView, View, Text, Image } from 'react-native';
+import { TouchableOpacity, Text, View, Image, StyleSheet } from 'react-native';
 
 
-export default function Item({ navigation }) {
-   
+//Define your stateless componetns, and destrcuts props from function arguments
+const Photo = ({id, name, url, navigation}) => {
+    const item = {
+        id: id,
+        name: name,
+        uri: url
+    }
     return (
-        <>       
-            <SafeAreaView>
-                <View style={{backgroundColor: '#fff',}}>        
-                    <Image source={{uri: 'https://res.cloudinary.com/aa1997/image/upload/v1535930682/pokeball-image.jpg'}}/>
-                    <Text>Name</Text>
-                </View>
-            </SafeAreaView>
-        </>
-    );
+        <TouchableOpacity style={{backgroundColor: 'transparent'}} 
+            onPress={() => navigation.navigate('PhotoDetails', {item})}>
+            <View  style={styles.listItemContainer}>
+                <Text style={styles.itemHeader}>{name}</Text>
+                <Image source={{uri: url}} 
+                        style={styles.itemImage}/>
+            </View>
+        </TouchableOpacity>
+    )
 }
+
+
+styles = StyleSheet.create({
+    // Photos Styles
+    listItemContainer: {
+        backgroundColor: '#ffffff',
+        borderStyle: 'solid',
+        borderColor: '#292d83',
+        borderBottomWidth: 2,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 20
+    },
+    itemHeader: {  
+        color: '#292d83',
+        fontSize: 24,
+    },
+    itemImage: {
+        backgroundColor: 'transparent',
+        height: 50,
+        width: 50
+    },
+
+})
+export default Photo;
