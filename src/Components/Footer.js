@@ -6,36 +6,41 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
   StyleSheet
 } from 'react-native';
-
+import { useRoute } from '@react-navigation/native';
 
 export default function Footer() {
-   
+    const route = useRoute();
+    let [color, setColor] = useState('#FFFFFF');
+    if (route.name != 'Login') { 
+        setColor = '#282d84';
+    }
+
     return (
         <>
-            <View style={styles.container}>
-                <Text style={styles.copyRightText}>2020 Copyright Asdf Network Latam SAS.</Text>
-                <Text style={styles.copyRightText}>All rights reserved.</Text>
+            <View style={styles.bottom}>
+                <Text style={{fontFamily: 'Barlow-Bold', color: '#FFFFFF',
+                    fontSize: 18}}>2020 Copyright Asdf Network Latam SAS.</Text>
+                <Text style={{fontFamily: 'Barlow-Bold', color: '#FFFFFF',
+                    fontSize: 18}}>All rights reserved.</Text>
             </View>
         </>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
+    bottom: {
+        width: '100%',
+        padding: 10,
+        backgroundColor: '#282d84',
         alignItems: 'center',
-        marginTop: 50
-    },
-    copyRightText: {
-       // color: '#0a18f1',
-        color: '#FFFFFF',
-        fontFamily: 'Barlow-Bold',
-        fontSize: 14,
+        marginBottom: 0,
+        marginTop:'97%'
     }
 });
 

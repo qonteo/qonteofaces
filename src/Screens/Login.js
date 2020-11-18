@@ -42,12 +42,16 @@ const LoginScreen: () => React$Node = ({navigation}) => {
       }  
       setLoading(true);
       let response = await api.login({email: userEmail, password: userPassword});
+      console.log("RESPONSE ", response);
       await handleLogin(response);
-      
+      console.log("RESPONSE ", response);
+
       // If server response message same as Data Matched
       if (response.user.isVerified == 't') {
-        navigation.navigate(Home); 
+        setLoading(false);
+        navigation.navigate('Home'); 
       } else {
+        setLoading(false);
         setErrortext('Please check your email id or password');
         console.log('Please check your email id or password');
       }
@@ -55,6 +59,8 @@ const LoginScreen: () => React$Node = ({navigation}) => {
       setLoading(false);
     } catch(error) {
       console.log(error);
+      setLoading(false);
+      setErrortext('Please check your email id or password');
       throw new Error(error);
     }
   };
@@ -185,9 +191,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   errorTextStyle: {
-    color: 'red',
+    color: '#FF64B4',
     textAlign: 'center',
-    fontSize: 14,
+    marginVertical: 20,
+    fontSize: 16,
+    fontFamily: 'Barlow-Bold'
   },
   imageTextStyle: {
       color:'#FFFFFF',

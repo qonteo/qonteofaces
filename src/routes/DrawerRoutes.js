@@ -3,7 +3,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 
 const Drawer = createDrawerNavigator();
 
-import Home from '../screens/Home';
+import HomeScreen from '../screens/Home';
 import PhotosScreen from '../screens/PhotosScreen';
 import PhotoDetailsScreen from '../screens/PhotoDetails';
 import LogoutScreen from '../screens/LogoutScreen';
@@ -15,7 +15,7 @@ export default function DrawerRoutes() {
                 headerStyle: {backgroundColor: '#292d83'},
                 headerTintColor: '#ffffff',                             
             }}>
-            <Drawer.Screen name="Home" component={Home} />            
+            <Drawer.Screen name="Home" component={HomeScreen} />            
             <Drawer.Screen name="Photos" component={PhotosScreen} />  
             <Drawer.Screen name="PhotoDetails" component={PhotoDetailsScreen} 
                 options={{drawerLabel: () => null, title: null, drawerIcon: () => null}}/>          

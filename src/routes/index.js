@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 const MainStack = createStackNavigator();
 
 import SplashScreen from '../screens/SplashScreen';
-import LoginScreen from '../screens/LoginScreen';
+import LoginScreen from '../screens/Login';
 import DrawerRoutes from './DrawerRoutes';
 
 import { View, StatusBar } from 'react-native';

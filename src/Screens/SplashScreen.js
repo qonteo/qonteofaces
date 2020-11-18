@@ -4,8 +4,6 @@ import React, { useState, useEffect } from 'react';
 
 //Import all required component
 import { ActivityIndicator, View, StyleSheet, Image, Text } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
-
 import AuthProvider, { useAuth } from "../provider";
 
 export default function SplashScreen({ navigation }) {

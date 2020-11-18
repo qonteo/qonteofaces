@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { SafeAreaView, ScrollView, View, Text, TextInput, TouchableOpacity, Image, StyleSheet, StatusBar } from 'react-native';
+import { KeyboardAvoidingView, Keyboard, SafeAreaView, View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
-import RNFetchBlob from 'react-native-fetch-blob';
-
-import Footer from '../components/Footer';
+// import axios from 'axios';
+import RNFetchBlob from 'rn-fetch-blob';
 
 import ListPhotos from '../components/ListPhotos';
 import { useAuth } from '../provider';
@@ -14,9 +13,7 @@ export default function Photos({ navigation }) {
     let [photo, setPhoto] = useState(null);
     let [photoName, setPhotoName] = useState(null);
     const user = state.user;
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(false);
-    
+       
     function handleChoosePhoto() {
         const options = {
             //noData: true,
@@ -38,8 +35,41 @@ export default function Photos({ navigation }) {
             }
         });
     }
+{/*
+    async function onSubmitAmazon(data) {
+        console.log("USER ", user);
+        const realPath = Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri;
+        console.log("NAME ", photoName);
+        console.log("DESC ", photo.uri.substring(photo.uri.lastIndexOf('/')+1));
+        await RNFetchBlob.fetch('POST', 'http://ec2-54-86-23-8.compute-1.amazonaws.com/file/upload', {
+            Authorization : "Bearer ", 
+            //'Content-Type' : 'application/json',
+            'Content-Type' : 'multipart/form-data',
+          }, [
+            // element with property `filename` will be transformed into `file` in form data
+            { 
+              name: 'file',
+              filename:  photo.uri.substring(photo.uri.lastIndexOf('/')+1),
+              type: photo.type,
+              data: RNFetchBlob.wrap(realPath)          
+            }
+          ]).then((resp) => {
+            console.log("SERVER RESPONSE",resp);
+            alert('Success!');         
+            setPhoto(null);
+            navigation.navigate('Photos');
+        
+          }).catch((error) => {
+            console.log("Error", error);
+          });        
+    }
 
-    async function onSubmit() {
+
+
+
+
+
+    async function onSubmitLuna() {
         const realPath = Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri;
 
         await RNFetchBlob.fetch('POST', 
@@ -63,51 +93,102 @@ export default function Photos({ navigation }) {
     }     
  
 
-    async function uploadPhoto(data) {
-        console.log("USER ", user);
-        const realPath = Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri;
-        console.log("NAME ", photoName);
-        console.log("DESC ", data)
-        await RNFetchBlob.fetch('POST', 'https://dashboard.qonteo.com/REST/upload-photo-ios', {
+    async function onSubmit(data) {
+    const realPath = Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri;
+    const file_name = photo.uri.substring(photo.uri.lastIndexOf('/')+1);
+    console.log("NAME ", file_name);
+    console.log("DESC ", photo)
+
+    let formData = new FormData();
+    formData.append('file', realPath);
+    formData.append('data', JSON.stringify({
+        title: photoName,
+        user_id: user._id,
+        description: '',
+        mime_type : photo.type,
+        filename: file_name,
+        filesize: photo.fileSize,
+        height: photo.height,
+        width: photo.width,
+        isVertical: photo.isVertical
+    }));
+
+    console.log('>> formData >> ', formData);
+
+    // You should have a server side REST API 
+    await axios.post('https://dashboard.qonteo.com/REST/upload-photo-ios',
+        formData, {
+        headers: {
             Authorization : "Bearer " + user.password, 
-            //'Content-Type' : 'application/json',
-            'Content-Type' : 'multipart/form-data',
-          }, [
-            // element with property `filename` will be transformed into `file` in form data
-            { 
-              name: 'file',
-              filename: photo.fileName,
-              type: photo.type,
-              data: RNFetchBlob.wrap(realPath)          
-            },
-            // elements without property `filename` will be sent as plain text
-            { name : 'data',             
-              data : JSON.stringify({
-                title : photoName,
-                description: data,
-                user_id : user._id,
-                mime_type : photo.type,
-                filename: photo.fileName,
-                filesize: photo.fileSize,
-                height: photo.height,
-                width: photo.width,
-                isVertical: photo.isVertical}),
-              type: 'application/json',
-            }
-          ]).then((resp) => {
-            console.log("SERVER RESPONSE",resp);
-            alert('Success!');         
-            setPhoto(null);
-            navigation.navigate('Photos');
-        
-          }).catch((error) => {
-            console.log(error);
-          });        
+            'Content-Type': 'multipart/form-data'
+        }
+      }
+    ).then((resp) => {
+        console.log("SERVER RESPONSE",resp);
+        alert('your image uploaded successfully');         
+        setPhoto(null);
+        navigation.navigate('Photos');
+    
+    }).catch((error) => {
+        alert("ERROR: " + error);
+        console.log(error);
+    });                
     }
+*/}
+
+async function onSubmit() {
+    const realPath = Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri;
+    const file_name = photo.uri.substring(photo.uri.lastIndexOf('/')+1);
+    console.log("NAME ", file_name);
+    //console.log("DESC ", data)
+
+    await RNFetchBlob.fetch('POST', 'https://dashboard.qonteo.com/REST/upload-photo-ios', {
+        Authorization : "Bearer " , 
+        //'Content-Type' : 'application/json',
+        'Content-Type' : 'multipart/form-data',
+      }, [
+        // element with property `filename` will be transformed into `file` in form data
+        { 
+          name: 'file',
+          filename: file_name,
+          type: photo.type,
+          data: RNFetchBlob.wrap(realPath)          
+          //data: photo.data
+        },
+        // elements without property `filename` will be sent as plain text
+        { 
+            name : 'data',             
+            data : JSON.stringify({
+                title : photoName,
+                user_id : user._id,
+                description : '',
+               // mime_type : photo.type,
+               // filename: file_name,
+               // filesize: photo.fileSize,
+               // height: photo.height,
+               // width: photo.width,
+               // isVertical: photo.isVertical
+            }),
+            type: 'application/json',
+        }
+      ]).then((resp) => {
+        console.log("SERVER RESPONSE",resp);
+        alert('your image uploaded successfully');         
+        setPhoto(null);
+        navigation.navigate('Photos');
+    
+      }).catch((error) => {
+        alert("ERROR: " + error);
+        console.log(error);
+      });                
+}
+
+
+
 
     return (
-        <>
-            <SafeAreaView>
+        <View style={styles.mainBody}>     
+            <KeyboardAvoidingView enabled>
                 <View style={styles.container}>      
                     {photo ?
                         <View>
@@ -129,13 +210,7 @@ export default function Photos({ navigation }) {
                                 underlineColorAndroid="#FFFFFF"
                                 placeholder="Type a subtitle for the photo"
                                 placeholderTextColor="#282d84"
-                                autoCapitalize="none"
-                                keyboardType="name-phone-pad"
-                                ref={ref => {
-                                this._nameinput = ref;
-                                }}
-                                returnKeyType="next"
-                                blurOnSubmit={false}
+                                onSubmitEditing={Keyboard.dismiss}
                             />
                             <TouchableOpacity
                                 style={styles.buttonStyle}
@@ -155,17 +230,19 @@ export default function Photos({ navigation }) {
                             </TouchableOpacity>       
                         </View> 
 
-                    }  
-                    <View  style={styles.container}><Text>sddffgsdg</Text></View>
-                    <Footer />
+                    }
                 </View>
-            </SafeAreaView>
-        </>
+            </KeyboardAvoidingView>  
+        </View>
     );
 }
 
 
 const styles = StyleSheet.create({
+    mainBody: {
+        flex: 1,
+        justifyContent: 'center',
+    },
     container : {
         alignItems: 'center', 
         width: '100%',
@@ -193,14 +270,15 @@ const styles = StyleSheet.create({
     buttonTextStyle: {
         color: '#FFFFFF',
         alignItems: 'center',
-        paddingVertical: 20,
-        fontSize: 16,
+        paddingVertical: 15,
+        fontSize: 24,
+        fontFamily: 'Barlow-Bold'
     },
     inputStyle: {
         width: 300,
         height: 60,
         color: '#282d84',
-        marginVertical: 10,
+        marginVertical: 20,
         padding: 20,
         borderWidth: 1,
         borderRadius: 10,
@@ -216,10 +294,10 @@ const styles = StyleSheet.create({
         width: 80, 
         height: 80,
         borderRadius: 80,
-        backgroundColor: '#282d84', 
+        backgroundColor: '#7DE24E', 
         alignItems: 'center',
         marginTop: 0,
-        marginBottom: 70,
+        marginBottom: 10,
         padding: 5
     },
     buttonPlusTextStyle: { 
