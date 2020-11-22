@@ -4,8 +4,9 @@ import {ActivityIndicator, View, Text, Button} from 'react-native';
 import { useAuth } from "../provider";
 
 export default function Logout({ navigation }) {
-    const { handleLogout } = useAuth();
-    
+    const { state, handleLogout } = useAuth();
+    const user = state.user;
+
     useEffect(() => {
             console.log("Running useEffect hook");
             initialize();
@@ -14,6 +15,7 @@ export default function Logout({ navigation }) {
     async function initialize() {
         try {
             handleLogout();
+            state.user = null;
             navigation.navigate('Login');
         } catch (e) {
             navigation.navigate('Login');

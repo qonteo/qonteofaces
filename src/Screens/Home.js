@@ -12,8 +12,10 @@ import {
   StyleSheet,
   View,
   Text,
-  TouchableOpacity,
+  TouchableOpacity
 } from 'react-native';
+
+import { useTheme } from '@react-navigation/native';
 
 import Footer from '../components/Footer';
 
@@ -27,16 +29,10 @@ const App: () => React$Node = ({navigation}) => {
     <>
       <SafeAreaView>
         <View style={styles.container}>
-          <View style={styles.WelcomeTextStyle}>
-              {user 
-                  ? <Text>{`Welcome ${user.firstName} ${user.lastName} `}</Text> 
-                  : <Text>Welcome</Text>
-              }                
-          </View>
           <TouchableOpacity
-              style={styles.Button}
-              onPress={() => navigation.navigate('Photos')}>
-              <Text style={styles.buttonText}>Photos</Text>
+            style={styles.Button}
+            onPress={() => navigation.navigate('Photos')}>
+            <Text style={styles.buttonText}>Photos</Text>
           </TouchableOpacity>          
           <Footer/>
         </View>
@@ -48,9 +44,6 @@ const App: () => React$Node = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {   
       alignItems:'center',
-  },
-  WelcomeTextStyle: {
-    marginVertical: 30
   },
   Button: {
     backgroundColor: "#7DE24E",

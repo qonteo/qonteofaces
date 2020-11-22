@@ -104,6 +104,22 @@
 		<string>barlowsemicondensed-thin.otf</string>
 		<string>barlowsemicondensed-thinitalic.otf</string>
 		<string>Rotters.ttf</string>
+		<string>FontAwesome.ttf</string>
+		<string>MaterialCommunityIcons.ttf</string>
+		<string>AntDesign.ttf</string>
+		<string>Entypo.ttf</string>
+		<string>EvilIcons.ttf</string>
+		<string>Feather.ttf</string>
+		<string>FontAwesome5_Brands.ttf</string>
+		<string>FontAwesome5_Regular.ttf</string>
+		<string>FontAwesome5_Solid.ttf</string>
+		<string>Fontisto.ttf</string>
+		<string>Foundation.ttf</string>
+		<string>Ionicons.ttf</string>
+		<string>MaterialIcons.ttf</string>
+		<string>Octicons.ttf</string>
+		<string>SimpleLineIcons.ttf</string>
+		<string>Zocial.ttf</string>
 	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>To allow users to take photos, using Qonteo's app, the application warns the users and requests permission to access the device's camera. This feature will be exploited only during the time of usage. While you take your photo and upload it to Qonteo’s store. Your data won't be never exposed neither shared with anyone but you and Qonteo software. Please, we encourage you to review our terms of use and privacy policy at https://dashboard.qonteo.com/privacy-policy</string>

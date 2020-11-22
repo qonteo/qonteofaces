@@ -35,31 +35,26 @@ export default function Photos({ navigation }) {
             }
         });
     }
-{/*
-    async function onSubmitAmazon(data) {
-        console.log("USER ", user);
+
+    async function onSubmit() {
+        //console.log("USER ", user);
         const realPath = Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri;
-        console.log("NAME ", photoName);
-        console.log("DESC ", photo.uri.substring(photo.uri.lastIndexOf('/')+1));
+        //console.log("NAME ", photoName);
+        //console.log("DESC ", photo.uri.substring(photo.uri.lastIndexOf('/')+1));
         await RNFetchBlob.fetch('POST', 'http://ec2-54-86-23-8.compute-1.amazonaws.com/file/upload', {
             Authorization : "Bearer ", 
-            //'Content-Type' : 'application/json',
-            'Content-Type' : 'multipart/form-data',
-          }, [
+                //'Content-Type' : 'application/json',
+                'Content-Type' : 'multipart/form-data',
+        }, [
             // element with property `filename` will be transformed into `file` in form data
-            { 
-              name: 'file',
-              filename:  photo.uri.substring(photo.uri.lastIndexOf('/')+1),
-              type: photo.type,
-              data: RNFetchBlob.wrap(realPath)          
-            }
-          ]).then((resp) => {
-            console.log("SERVER RESPONSE",resp);
-            alert('Success!');         
-            setPhoto(null);
-            navigation.navigate('Photos');
-        
-          }).catch((error) => {
+        { 
+            name: 'file',
+            filename:  photo.uri.substring(photo.uri.lastIndexOf('/')+1),
+            type: photo.type,
+            data: RNFetchBlob.wrap(realPath)          
+        }]).then((resp) => {
+            uploadPhoto(resp);
+        }).catch((error) => {
             console.log("Error", error);
           });        
     }
@@ -68,7 +63,7 @@ export default function Photos({ navigation }) {
 
 
 
-
+{/*
     async function onSubmitLuna() {
         const realPath = Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri;
 
@@ -92,96 +87,54 @@ export default function Photos({ navigation }) {
         });        
     }     
  
-
-    async function onSubmit(data) {
-    const realPath = Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri;
-    const file_name = photo.uri.substring(photo.uri.lastIndexOf('/')+1);
-    console.log("NAME ", file_name);
-    console.log("DESC ", photo)
-
-    let formData = new FormData();
-    formData.append('file', realPath);
-    formData.append('data', JSON.stringify({
-        title: photoName,
-        user_id: user._id,
-        description: '',
-        mime_type : photo.type,
-        filename: file_name,
-        filesize: photo.fileSize,
-        height: photo.height,
-        width: photo.width,
-        isVertical: photo.isVertical
-    }));
-
-    console.log('>> formData >> ', formData);
-
-    // You should have a server side REST API 
-    await axios.post('https://dashboard.qonteo.com/REST/upload-photo-ios',
-        formData, {
-        headers: {
-            Authorization : "Bearer " + user.password, 
-            'Content-Type': 'multipart/form-data'
-        }
-      }
-    ).then((resp) => {
-        console.log("SERVER RESPONSE",resp);
-        alert('your image uploaded successfully');         
-        setPhoto(null);
-        navigation.navigate('Photos');
-    
-    }).catch((error) => {
-        alert("ERROR: " + error);
-        console.log(error);
-    });                
-    }
 */}
 
-async function onSubmit() {
-    const realPath = Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri;
-    const file_name = photo.uri.substring(photo.uri.lastIndexOf('/')+1);
-    console.log("NAME ", file_name);
-    //console.log("DESC ", data)
 
-    await RNFetchBlob.fetch('POST', 'https://dashboard.qonteo.com/REST/upload-photo-ios', {
-        Authorization : "Bearer " , 
-        //'Content-Type' : 'application/json',
-        'Content-Type' : 'multipart/form-data',
-      }, [
-        // element with property `filename` will be transformed into `file` in form data
-        { 
-          name: 'file',
-          filename: file_name,
-          type: photo.type,
-          data: RNFetchBlob.wrap(realPath)          
-          //data: photo.data
-        },
-        // elements without property `filename` will be sent as plain text
-        { 
-            name : 'data',             
-            data : JSON.stringify({
-                title : photoName,
-                user_id : user._id,
-                description : '',
-               // mime_type : photo.type,
-               // filename: file_name,
-               // filesize: photo.fileSize,
-               // height: photo.height,
-               // width: photo.width,
-               // isVertical: photo.isVertical
-            }),
-            type: 'application/json',
-        }
-      ]).then((resp) => {
-        console.log("SERVER RESPONSE",resp);
-        alert('your image uploaded successfully');         
-        setPhoto(null);
-        navigation.navigate('Photos');
-    
-      }).catch((error) => {
-        alert("ERROR: " + error);
-        console.log(error);
-      });                
-}
+    async function uploadPhoto(response) {
+        const realPath = Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri;
+        const file_name = photo.uri.substring(photo.uri.lastIndexOf('/')+1);
+        //console.log("NAME ", file_name);
+        //console.log("DESC ", response.data)
+
+        await RNFetchBlob.fetch('POST', 'https://dashboard.qonteo.com/REST/upload-photo-ios', {
+            Authorization : "Bearer " , 
+            //'Content-Type' : 'application/json',
+            'Content-Type' : 'multipart/form-data',
+        }, [
+            // element with property `filename` will be transformed into `file` in form data
+            { 
+            name: 'file',
+            filename: file_name,
+            type: photo.type,
+            data: RNFetchBlob.wrap(realPath)          
+            //data: photo.data
+            },
+            // elements without property `filename` will be sent as plain text
+            { 
+                name : 'data',             
+                data : JSON.stringify({
+                    title : photoName,
+                    user_id : user._id,
+                    description : response.data,
+                // mime_type : photo.type,
+                // filename: file_name,
+                // filesize: photo.fileSize,
+                // height: photo.height,
+                // width: photo.width,
+                // isVertical: photo.isVertical
+                }),
+                type: 'application/json',
+            }
+        ]).then((resp) => {
+            //console.log("SERVER RESPONSE",resp);
+            alert('Success! Your image uploaded successfully');         
+            setPhoto(null);
+            navigation.navigate('Photos');
+        }).catch((error) => {
+            alert("ERROR: " + error);
+            console.log(error);
+        });                
+    }
 
 
 

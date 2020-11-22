@@ -1,16 +1,15 @@
-/* This is an Login Registration example from https://aboutreact.com/ */
-/* https://aboutreact.com/react-native-login-and-signup/ */
 
 //Import React and Hook we needed
 import React, { useState } from 'react';
 
 //Import all required component
 import {
+  Alert,
   StyleSheet,
   TextInput,
+  ScrollView,
   View,
   Text,
-  ScrollView,
   Image,
   Keyboard,
   TouchableOpacity,
@@ -24,49 +23,37 @@ import { useAuth } from '../provider';
 
 const SignInScreen: () => React$Node = ({navigation}) => {
   let [userEmail, setUserEmail] = useState('');
-  let [userPassword, setUserPassword] = useState('');
   let [loading, setLoading] = useState(false);
   let [errortext, setErrortext] = useState('');
-  const { handleLogin } = useAuth();       
+      
        
   async function handleSubmitPress() {    
+    setLoading(false);
+
     try {
-      setErrortext('');      
       if (!userEmail) {
         alert('Please fill Email');
         return;
       }
-      if (!userPassword) {
-        alert('Please fill Password');
-        return;
-      }  
-      setLoading(true);
-      let response = await api.login({email: userEmail, password: userPassword});
-      await handleLogin(response);
+  
+      let response = await api.forgotPassword({email: userEmail});
       
-      // If server response message same as Data Matched
-      if (response.user.isVerified == 't') {
-        setLoading(false);
-        navigation.navigate('Home'); 
-      } else {
-        setLoading(false);
-        setErrortext('Please check your email id or password');
-        console.log('Please check your email id or password');
-      }
-      //Hide Loader
-      setLoading(false);
-    } catch(error) {
-      console.log(error);
-      setLoading(false);
-      setErrortext('Please check your email id or password');
-      throw new Error(error);
+      Alert.alert(
+          'Request was sent successfully!',
+          'An email was sent to reset your password',
+          [{text: 'OK', onPress: () => navigation.goBack()}],
+          {cancelable: false},
+      );
+    } catch (error) {
+        setErrortext('Unauthorized! \n' + error.message + '\n Email Invalid!');
+        setLoading(false)
     }
+   
   };
 
   return (
-    <View style={styles.mainBody}>     
+    <View style={styles.container}>     
       <Loader loading={loading} />
-
       <ScrollView keyboardShouldPersistTaps="handled">
         <View style={{ marginTop: 80 }}>
           <KeyboardAvoidingView enabled>
@@ -82,39 +69,23 @@ const SignInScreen: () => React$Node = ({navigation}) => {
               />
               <Text style={styles.imageTextStyle}>Faces</Text>       
             </View>
+            <View style={styles.labelStyle}>
+              <Text style={styles.labelTextStyle}>Forgot your password?</Text>
+            </View>
             <View style={styles.SectionStyle}>
               <TextInput
                 style={styles.inputStyle}
                 onChangeText={UserEmail => setUserEmail(UserEmail)}
                 underlineColorAndroid="#FFFFFF"
-                placeholder="Enter Email" //dummy@abc.com
+                placeholder="Enter a valid Email" //dummy@abc.com
                 placeholderTextColor="#F6F6F7"
                 autoCapitalize="none"
                 keyboardType="email-address"
                 ref={ref => {
                   this._emailinput = ref;
                 }}
-                returnKeyType="next"
-                onSubmitEditing={() =>
-                  this._passwordinput && this._passwordinput.focus()
-                }
-                blurOnSubmit={false}
-              />
-            </View>
-            <View style={styles.SectionStyle}>
-              <TextInput
-                style={styles.inputStyle}
-                onChangeText={UserPassword => setUserPassword(UserPassword)}
-                underlineColorAndroid="#FFFFFF"
-                placeholder="Enter Password" //12345
-                placeholderTextColor="#F6F6F7"
-                keyboardType="default"
-                ref={ref => {
-                  this._passwordinput = ref;
-                }}
                 onSubmitEditing={Keyboard.dismiss}
                 blurOnSubmit={false}
-                secureTextEntry={true}
               />
             </View>
             {errortext != '' ? (
@@ -124,22 +95,19 @@ const SignInScreen: () => React$Node = ({navigation}) => {
               style={styles.buttonStyle}
               activeOpacity={0.5}
               onPress={handleSubmitPress}>
-              <Text style={styles.buttonTextStyle}>LOGIN</Text>
+              <Text style={styles.buttonTextStyle}>Recover Password</Text>
             </TouchableOpacity>
-
             <Text
-              style={styles.forgotPasswordTextStyle}
-              onPress={() => navigation.navigate('ForgotPassword')}>
-              Forgot you Password?
+              style={styles.signInTextStyle}
+              onPress={() => navigation.navigate('Login')}>
+              Sign In!
             </Text>
-
-
-            <Text
-              style={styles.registerTextStyle}
-              onPress={() => navigation.navigate('Register')}>
-              New Here ? Register
-            </Text>
-            <Footer/>
+           <View style={{marginTop: '11%', alignItems: 'center' }}>
+           <Text style={{fontFamily: 'Barlow', color: '#FFFFFF',
+                    fontSize: 18}}>2020 Copyright Asdf Network Latam SAS.</Text>
+                <Text style={{fontFamily: 'Barlow', color: '#FFFFFF',
+                    fontSize: 18}}>All rights reserved.</Text>
+           </View>
             
           </KeyboardAvoidingView>
         </View>
@@ -151,18 +119,15 @@ const SignInScreen: () => React$Node = ({navigation}) => {
 export default SignInScreen;
 
 const styles = StyleSheet.create({
-  mainBody: {
+  container: {
     flex: 1,
-    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: '#282d84',
   },
   SectionStyle: {
     flexDirection: 'row',
     height: 40,
     marginTop: 20,
-    marginLeft: 35,
-    marginRight: 35,
-    margin: 10,
   },
   buttonStyle: {
     height: 60,
@@ -172,14 +137,13 @@ const styles = StyleSheet.create({
     borderColor: '#7DE24E',
     alignItems: 'center',
     borderRadius: 20,
-    marginHorizontal: 35,
     marginTop: 40,
     marginBottom: 20,
   },
   buttonTextStyle: {
     color: '#FFFFFF',
     alignItems: 'center',
-    paddingVertical: 20,
+    paddingVertical: 15,
     fontFamily: 'Barlow-Bold',
     fontSize: 20,
   },
@@ -187,31 +151,35 @@ const styles = StyleSheet.create({
     height: 60,
     flex: 1,
     color: 'white',
+    fontSize: 18,
+    fontFamily: 'Barlow-Regular',
     paddingLeft: 15,
     paddingRight: 15,
     borderWidth: 1,
     borderRadius: 20,
     borderColor: 'white',
-    fontSize: 18,
-    fontFamily: 'Barlow-Regular'
   },
-  forgotPasswordTextStyle: {
-    marginTop: 20,
-    color: '#FFFFFF',
-    textAlign: 'center',
-    fontWeight: 'bold',
-    fontSize: 18,
-    fontFamily: 'Barlow-Bold'
-
-  },
-
-  registerTextStyle: {
-    color: '#FFFFFF',
-    textAlign: 'center',
-    fontWeight: 'bold',
-    fontSize: 20,
-    fontFamily: 'Barlow-Bold',
+  labelStyle: {
+    flexDirection: 'row',
     marginTop: 40,
+    marginLeft: 35,
+    marginRight: 35,
+  },
+  labelTextStyle: {
+    color: '#FFFFFF',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontFamily: 'Barlow-Bold',
+    fontSize: 20,
+  
+  },
+  signInTextStyle: {
+    marginTop:20,
+    color: '#FFFFFF',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontFamily: 'Barlow-Bold',
+    fontSize: 20,
   },
   errorTextStyle: {
     color: '#FF64B4',

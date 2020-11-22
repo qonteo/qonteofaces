@@ -3,6 +3,7 @@ import * as c from '../constants';
 
 export async function register(data){
     try{
+        console.log({data});
         let res = await axios.post(c.REGISTER, data);
         return res.data;
     }catch (e) {
@@ -13,6 +14,8 @@ export async function register(data){
 export async function login(data){
     try{
         let res = await axios.post(c.LOGIN, data);
+        console.log({res});
+        
         return res.data;
     }catch (e) {
         throw handler(e);

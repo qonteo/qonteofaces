@@ -24,9 +24,9 @@ export default function Footer() {
     return (
         <>
             <View style={styles.bottom}>
-                <Text style={{fontFamily: 'Barlow-Bold', color: '#FFFFFF',
+                <Text style={{fontFamily: 'Barlow', color: '#FFFFFF',
                     fontSize: 18}}>2020 Copyright Asdf Network Latam SAS.</Text>
-                <Text style={{fontFamily: 'Barlow-Bold', color: '#FFFFFF',
+                <Text style={{fontFamily: 'Barlow', color: '#FFFFFF',
                     fontSize: 18}}>All rights reserved.</Text>
             </View>
         </>

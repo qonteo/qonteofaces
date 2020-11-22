@@ -22,8 +22,10 @@ import Footer from '../components/Footer';
 import * as api from '../services/auth';
 import { useAuth } from '../provider'; 
 
-const SignInScreen: () => React$Node = ({navigation}) => {
+const SignInScreen = ({navigation}) => {
   let [userEmail, setUserEmail] = useState('');
+  let [firstName, setFirstName] = useState('');
+  let [lastName, setLastName] = useState('');
   let [userPassword, setUserPassword] = useState('');
   let [loading, setLoading] = useState(false);
   let [errortext, setErrortext] = useState('');
@@ -32,6 +34,14 @@ const SignInScreen: () => React$Node = ({navigation}) => {
   async function handleSubmitPress() {    
     try {
       setErrortext('');      
+      if (!firstName) {
+        alert('Please fill first names');
+        return;
+      }  
+      if (!lastName) {
+        alert('Please fill last name');
+        return;
+      }  
       if (!userEmail) {
         alert('Please fill Email');
         return;
@@ -40,26 +50,19 @@ const SignInScreen: () => React$Node = ({navigation}) => {
         alert('Please fill Password');
         return;
       }  
-      setLoading(true);
-      let response = await api.login({email: userEmail, password: userPassword});
+
+      setLoading(true);  
+      let response = await api.register({firstName: firstName, lastName: lastName, email: userEmail, password: userPassword});
       await handleLogin(response);
-      
-      // If server response message same as Data Matched
-      if (response.user.isVerified == 't') {
-        setLoading(false);
-        navigation.navigate('Home'); 
-      } else {
-        setLoading(false);
-        setErrortext('Please check your email id or password');
-        console.log('Please check your email id or password');
-      }
+
       //Hide Loader
       setLoading(false);
+      navigation.navigate('Home'); 
     } catch(error) {
       console.log(error);
       setLoading(false);
-      setErrortext('Please check your email id or password');
-      throw new Error(error);
+      setErrortext('Email already exists. Please, Sign In!');
+
     }
   };
 
@@ -82,6 +85,45 @@ const SignInScreen: () => React$Node = ({navigation}) => {
               />
               <Text style={styles.imageTextStyle}>Faces</Text>       
             </View>
+            <View style={styles.SectionStyle}>
+              <TextInput
+                style={styles.inputStyle}
+                onChangeText={FirstName => setFirstName(FirstName)}
+                underlineColorAndroid="#FFFFFF"
+                placeholder="Enter first names"
+                placeholderTextColor="#F6F6F7"
+                autoCapitalize="none"
+                keyboardType="name-phone-pad"
+                ref={ref => {
+                  this._firstnameinput = ref;
+                }}
+                returnKeyType="next"
+                onSubmitEditing={() =>
+                  this._lastnameinput && this._lastnameinput.focus()
+                }
+                blurOnSubmit={false}
+              />
+            </View>
+            <View style={styles.SectionStyle}>
+              <TextInput
+                style={styles.inputStyle}
+                onChangeText={LastName => setLastName(LastName)}
+                underlineColorAndroid="#FFFFFF"
+                placeholder="Enter last name"
+                placeholderTextColor="#F6F6F7"
+                autoCapitalize="none"
+                keyboardType="name-phone-pad"
+                ref={ref => {
+                  this._lastnameinput = ref;
+                }}
+                returnKeyType="next"
+                onSubmitEditing={() =>
+                  this._emailinput && this._emailinput.focus()
+                }
+                blurOnSubmit={false}
+              />
+            </View>
+
             <View style={styles.SectionStyle}>
               <TextInput
                 style={styles.inputStyle}
@@ -124,20 +166,12 @@ const SignInScreen: () => React$Node = ({navigation}) => {
               style={styles.buttonStyle}
               activeOpacity={0.5}
               onPress={handleSubmitPress}>
-              <Text style={styles.buttonTextStyle}>LOGIN</Text>
+              <Text style={styles.buttonTextStyle}>REGISTER</Text>
             </TouchableOpacity>
-
             <Text
-              style={styles.forgotPasswordTextStyle}
-              onPress={() => navigation.navigate('ForgotPassword')}>
-              Forgot you Password?
-            </Text>
-
-
-            <Text
-              style={styles.registerTextStyle}
-              onPress={() => navigation.navigate('Register')}>
-              New Here ? Register
+              style={styles.signInTextStyle}
+              onPress={() => navigation.navigate('Login')}>
+              Have an account? <Text style={{fontFamily: 'Barlow-Bold'}}> Sign In!</Text>
             </Text>
             <Footer/>
             
@@ -173,15 +207,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 20,
     marginHorizontal: 35,
-    marginTop: 40,
-    marginBottom: 20,
+    marginVertical: 40,
   },
   buttonTextStyle: {
     color: '#FFFFFF',
     alignItems: 'center',
     paddingVertical: 20,
-    fontFamily: 'Barlow-Bold',
     fontSize: 20,
+    fontFamily: 'Barlow-Bold'
   },
   inputStyle: {
     height: 60,
@@ -195,23 +228,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: 'Barlow-Regular'
   },
-  forgotPasswordTextStyle: {
-    marginTop: 20,
+  signInTextStyle: {
+    marginTop: 30,
     color: '#FFFFFF',
     textAlign: 'center',
-    fontWeight: 'bold',
-    fontSize: 18,
-    fontFamily: 'Barlow-Bold'
-
-  },
-
-  registerTextStyle: {
-    color: '#FFFFFF',
-    textAlign: 'center',
-    fontWeight: 'bold',
+    fontFamily: 'Barlow-Regular',
     fontSize: 20,
-    fontFamily: 'Barlow-Bold',
-    marginTop: 40,
   },
   errorTextStyle: {
     color: '#FF64B4',

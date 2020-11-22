@@ -4,12 +4,15 @@ import { TouchableOpacity, Text, View, Image, StyleSheet } from 'react-native';
 
 
 //Define your stateless componetns, and destrcuts props from function arguments
-const Photo = ({id, name, url, navigation}) => {
+const Photo = ({id, name, description, url, navigation}) => {
     const item = {
         id: id,
         name: name,
+        description: description.replace(/(\r\n|\n|\r)/gm,"").replace(/ /g,''),
         uri: url
     }
+
+
     return (
         <TouchableOpacity style={{backgroundColor: 'transparent'}} 
             onPress={() => navigation.navigate('PhotoDetails', {item})}>

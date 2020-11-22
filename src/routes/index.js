@@ -5,6 +5,8 @@ const MainStack = createStackNavigator();
 
 import SplashScreen from '../screens/SplashScreen';
 import LoginScreen from '../screens/Login';
+import RegisterScreen from '../screens/Register';
+import ForgotPasswordScreen from '../screens/ForgotPassword';
 import DrawerRoutes from './DrawerRoutes';
 
 import { View, StatusBar } from 'react-native';
@@ -26,6 +28,12 @@ export default function Routes({ navigation }) {
                         options={{headerShown:false}}/>
                     <MainStack.Screen name="Login"
                         component={LoginScreen}
+                        options={{headerShown:false}}/>
+                    <MainStack.Screen name="Register"
+                        component={RegisterScreen}
+                        options={{headerShown:false}}/>
+                    <MainStack.Screen name="ForgotPassword"
+                        component={ForgotPasswordScreen}
                         options={{headerShown:false}}/>
                     <MainStack.Screen name="Home"
                         component={DrawerRoutes}
