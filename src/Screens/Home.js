@@ -15,26 +15,26 @@ import {
   TouchableOpacity
 } from 'react-native';
 
-import { useTheme } from '@react-navigation/native';
-
-import Footer from '../components/Footer';
+import FooterHome from '../components/FooterHome';
 
 import { useAuth } from '../provider';
 
-const App: () => React$Node = ({navigation}) => {
+export default function HomeScreen({ navigation }) {
   const {state, handleLogout} = useAuth();
   const user = state.user;
 
   return (
     <>
       <SafeAreaView>
-        <View style={styles.container}>
-          <TouchableOpacity
-            style={styles.Button}
-            onPress={() => navigation.navigate('Photos')}>
-            <Text style={styles.buttonText}>Photos</Text>
-          </TouchableOpacity>          
-          <Footer/>
+        <View>
+          <View style={styles.container}>
+            <TouchableOpacity
+              style={styles.Button}
+              onPress={() => navigation.navigate('Photos')}>
+              <Text style={styles.buttonText}>Photos</Text>
+            </TouchableOpacity>                   
+          </View>
+          <FooterHome/>
         </View>
       </SafeAreaView>
     </>
@@ -43,7 +43,9 @@ const App: () => React$Node = ({navigation}) => {
 
 const styles = StyleSheet.create({
   container: {   
+      flex: 1,
       alignItems:'center',
+      marginTop: 20,
   },
   Button: {
     backgroundColor: "#7DE24E",
@@ -60,4 +62,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+

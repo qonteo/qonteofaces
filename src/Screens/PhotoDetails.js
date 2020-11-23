@@ -2,7 +2,7 @@ import React from 'react';
 import {SafeAreaView, ScrollView, View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-export default function PhotoDetails(navigation) {
+export default function PhotoDetails( navigation ) {
     console.log("NAV ", navigation);
     const item = {
         id: navigation.route.params.item.id,

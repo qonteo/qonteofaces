@@ -104,7 +104,7 @@ export function DrawerContent(props) {
                                 />
                             )}
                             label="Profile"
-                            onPress={() => {}}/>
+                            onPress={() => {props.navigation.navigate('UpdateProfile')}}/>
                     </Drawer.Section>
                     <Drawer.Section title="Preferences">
                         <TouchableRipple onPress={() => {toggleTheme()}}>

@@ -8,6 +8,7 @@ const Drawer = createDrawerNavigator();
 import HomeScreen from '../screens/Home';
 import PhotosScreen from '../screens/PhotosScreen';
 import PhotoDetailsScreen from '../screens/PhotoDetails';
+import UpdateProfileScreen from '../screens/UpdateProfile';
 import LogoutScreen from '../screens/Logout';
 
 
@@ -29,6 +30,7 @@ export default function DrawerRoutes() {
                 options={{drawerLabel: () => null, title: "Photo Details"}}/>          
             {/*<Drawer.Screen name="PhotoDetails" component={PhotoDetailsScreen} 
                 options={{drawerLabel: () => null, title: "Photo Details", drawerIcon: () => null}} />*/}
+            <Drawer.Screen name="UpdateProfile" component={UpdateProfileScreen} />  
             <Drawer.Screen name="Logout" component={LogoutScreen} />            
 
         </Drawer.Navigator>
