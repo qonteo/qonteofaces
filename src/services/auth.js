@@ -32,29 +32,6 @@ export async function forgotPassword(data) {
     }
 }
 
-export async function updateProfile(userId, data){
-    try{
-        const options = {
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "multipart/form-data"
-            }
-        };
-
-        const form_data = new FormData();
-        form_data.append('user_id',`${userId}`);
-        for ( let key in data )
-            form_data.append(key, data[key]);
-            
-        // let res = await axios.put(`${c.UPDATE_PROFILE}/${userId}`, form_data, options);
-        let res = await axios.post(c.UPDATE_PROFILE, data);
-        return res.data;
-    }catch (e) {
-        throw handler(e);
-    }
-}
-
-
 export function handler(err) {
     let error = err;
 

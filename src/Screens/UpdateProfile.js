@@ -24,7 +24,7 @@ import {
 } from 'react-native-paper';
 
 import Loader from '../components/Loader';
-import * as api from '../services/auth';
+import * as api from '../services/api';
 import { useAuth } from '../provider';
 import FooterHome from '../components/FooterHome';
 
@@ -66,7 +66,7 @@ export default function UpdateProfile() {
       }  
 
       setLoading(true);  
-      let response = await api.register({firstName: firstName, lastName: lastName, email: userEmail, password: userPassword});
+      let response = await api.updateProfile({firstName: firstName, lastName: lastName, email: userEmail, password: userPassword});
       await handleLogin(response);
 
       //Hide Loader
@@ -75,7 +75,7 @@ export default function UpdateProfile() {
     } catch(error) {
       console.log(error);
       setLoading(false);
-      setErrortext('Email already exists. Please, Sign In!');
+      setErrortext('Update failure!');
 
     }
   };

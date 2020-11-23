@@ -13,7 +13,6 @@ const Photo = ({id, name, description, url, navigation}) => {
         uri: url
     }
 
-console.log({item})
     return (
         <TouchableOpacity style={{backgroundColor: 'transparent'}} 
             onPress={() => navigation.navigate('PhotoDetails', {item})}>
