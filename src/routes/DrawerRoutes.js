@@ -17,12 +17,11 @@ export default function DrawerRoutes() {
         <Drawer.Navigator initialRouteName="Home"
             drawerContent={props => <DrawerContent { ... props} /> }
             drawerContentOptions={{
-                activeTintColor: '#282d84',
-        
+                activeTintColor: '#282d84',        
             }}
             screenOptions={{
                 headerStyle: {backgroundColor: '#292d83'},
-                headerTintColor: '#ffffff',                             
+                headerTintColor: '#ffffff',
             }}>
             <Drawer.Screen name="Home" component={HomeScreen} />            
             <Drawer.Screen name="Photos" component={PhotosScreen} />  

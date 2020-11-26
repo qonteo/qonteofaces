@@ -17,8 +17,8 @@ export default class Photos extends PureComponent {
         //Have a loading state where when data retrieve returns data. 
         loading: true
     }
-        
-    
+
+   
     //Define your componentDidMount lifecycle hook that will retrieve data.
     //Also have the async keyword to indicate that it is asynchronous. 
     async componentDidMount() {
@@ -28,12 +28,17 @@ export default class Photos extends PureComponent {
             const apiCall = await fetch('https://dashboard.qonteo.com/REST/listPhotos?user_id=' + this.props._id);
             const item = await apiCall.json();
             this.setState({itemList: item.results, loading: false});
+            this.setState({prevList: item.results, loading: false});
         } catch(err) {
             console.log("Error fetching data-----------", err);
         }
-    }
-    render() {
+    } 
 
+  
+
+
+    render() {
+        console.log("Here");
         //Destruct itemList and Loading from state.
         const { itemList, loading } = this.state;
         //Destruct navigation from props 
@@ -44,6 +49,7 @@ export default class Photos extends PureComponent {
         if(!loading) {
             return <FlatList 
                         data={itemList}
+                        numColumns={3}
                         renderItem={(data) => <ItemCard {...data.item} navigation={this.props.navigation} />}
                         keyExtractor={(item) => item.id} 
                         style={{width: '100%', height: '50%'}}

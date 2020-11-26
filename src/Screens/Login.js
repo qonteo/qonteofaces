@@ -1,5 +1,3 @@
-/* This is an Login Registration example from https://aboutreact.com/ */
-/* https://aboutreact.com/react-native-login-and-signup/ */
 
 //Import React and Hook we needed
 import React, { useState } from 'react';
@@ -148,7 +146,6 @@ const SignInScreen: () => React$Node = ({navigation}) => {
   );
 };
 
-export default SignInScreen;
 
 const styles = StyleSheet.create({
   mainBody: {
@@ -227,3 +224,6 @@ const styles = StyleSheet.create({
       paddingVertical: 10,
     },
 });
+
+
+export default SignInScreen;

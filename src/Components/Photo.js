@@ -15,11 +15,12 @@ const Photo = ({id, name, description, url, navigation}) => {
 
     return (
         <TouchableOpacity style={{backgroundColor: 'transparent'}} 
-            onPress={() => navigation.navigate('PhotoDetails', {item})}>
-            <View  style={styles.listItemContainer}>
-                <Text style={styles.itemHeader}>{name}</Text>
+            onPress={() => { 
+                navigation.navigate('PhotoDetails', {item})}}>
+            <View  style={styles.listItemContainer}>                
                 <Image source={{uri: url}} 
                         style={styles.itemImage}/>
+                <Text style={styles.itemHeader}>{name}</Text>
             </View>
         </TouchableOpacity>
     )
@@ -30,12 +31,15 @@ styles = StyleSheet.create({
     // Photos Styles
     listItemContainer: {
         backgroundColor: '#ffffff',
+        /*
         borderStyle: 'solid',
         borderColor: '#292d83',
         borderBottomWidth: 2,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        padding: 20
+        */
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: 2
+
     },
     itemHeader: {  
         color: '#292d83',
@@ -43,8 +47,8 @@ styles = StyleSheet.create({
     },
     itemImage: {
         backgroundColor: 'transparent',
-        height: 50,
-        width: 50
+        height: 120,
+        width: 120
     },
 
 })

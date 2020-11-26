@@ -1,5 +1,3 @@
-/* This is an Login Registration example from https://aboutreact.com/ */
-/* https://aboutreact.com/react-native-login-and-signup/ */
 
 //Import React and Hook we needed
 import React, { useState } from 'react';

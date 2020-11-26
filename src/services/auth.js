@@ -32,6 +32,19 @@ export async function forgotPassword(data) {
     }
 }
 
+
+export async function logout(data){
+    try{
+        console.log("LOGOTU");
+        let res = await axios.post(c.LOGOUT, data);
+        console.log({res});
+        
+        return res.data;
+    }catch (e) {
+        throw handler(e);
+    }
+}
+
 export function handler(err) {
     let error = err;
 

@@ -52,14 +52,17 @@ export function DrawerContent(props) {
                                         size={60}/>
                 
                             }
-                            <View style={{marginLeft: 15, flexDirection: 'column'}}>
-                                <Title style={styles.title}>{user.firstName} {user.lastName}</Title>
-                                <Caption style={styles.caption}>{user.email}</Caption>
-                            </View>
+                            {user
+                                ? <View style={{marginLeft: 15, flexDirection: 'column'}}>
+                                    <Title style={styles.title}>{user.firstNames} {user.lastName}</Title>
+                                    <Caption style={styles.caption}>{user.email}</Caption>
+                                </View>
+                                : <View></View>
+                            }
                         </View>
                         <View style={styles.row}>
                             <View style={styles.section}>
-                                <Paragraph style={[styles.paragraph, styles.caption]}>80</Paragraph>
+                                <Paragraph style={[styles.paragraph, styles.caption]}>0</Paragraph>
                                 <Caption style={styles.caption}>Uploaded files</Caption>
                             </View>
                         </View>
@@ -85,7 +88,7 @@ export function DrawerContent(props) {
                             )}
                             label="Photos"
                             onPress={() => {props.navigation.navigate('Photos')}}/>
-                        <DrawerItem
+                        {/*<DrawerItem
                             icon={({color, size}) => (
                                 <Icon
                                     name="video-vintage"
@@ -95,6 +98,7 @@ export function DrawerContent(props) {
                             )}
                             label="Videos"
                             onPress={() => {}}/>
+                            */}
                         <DrawerItem
                             icon={({color, size}) => (
                                 <Icon

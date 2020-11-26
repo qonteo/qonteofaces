@@ -3,17 +3,17 @@ import { KeyboardAvoidingView, Keyboard, SafeAreaView, View, Text, TextInput, To
 import ImagePicker from 'react-native-image-picker';
 // import axios from 'axios';
 import RNFetchBlob from 'rn-fetch-blob';
-
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ListPhotos from '../components/ListPhotos';
 import { useAuth } from '../provider';
 
 
-export default function Photos({ navigation }) {
+const PhotosScreen: () => React$Node = ({ navigation }) => {
     const {state, setState} = useAuth();
     let [photo, setPhoto] = useState(null);
     let [photoName, setPhotoName] = useState(null);
     const user = state.user;
-       
+    
     function handleChoosePhoto() {
         const options = {
             //noData: true,
@@ -55,7 +55,7 @@ export default function Photos({ navigation }) {
         }]).then((resp) => {
             uploadPhoto(resp);
         }).catch((error) => {
-            console.log("Error", error);
+            //console.log("Error", error);
           });        
     }
 
@@ -126,18 +126,13 @@ export default function Photos({ navigation }) {
                 type: 'application/json',
             }
         ]).then((resp) => {
-            //console.log("SERVER RESPONSE",resp);
             alert('Success! Your image uploaded successfully');         
             setPhoto(null);
             navigation.navigate('Photos');
         }).catch((error) => {
-            alert("ERROR: " + error);
-            console.log(error);
+            //console.log(error);
         });                
     }
-
-
-
 
     return (
         <View style={styles.mainBody}>     
@@ -176,11 +171,23 @@ export default function Photos({ navigation }) {
                     :   <View style={styles.container} >                           
                             <ListPhotos {...user} navigation={navigation} />
 
-                            <TouchableOpacity onPress={handleChoosePhoto}>
+                          
+
+                            <View style={{flexDirection: 'row'}}>
+                                <TouchableOpacity 
+                                    style={{ marginRight: 30, alignItems: 'center'}}
+                                    onPress={() => navigation.goBack()}>
+                                    <Icon name="keyboard-return" size={80} color="#282d84" />
+                                    <Text style={{fontFamily: 'Barlow-Bold', fontSize: 18, paddingTop: 10, color: '#282d84'}}>RETURN</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={handleChoosePhoto}>
                                 <View style={styles.buttonPlusViewStyle}>                
                                     <Text style={styles.buttonPlusTextStyle}>+</Text>
                                 </View>
-                            </TouchableOpacity>       
+                                <Text style={{fontFamily: 'Barlow-Bold', fontSize: 18, color: '#282d84'}}>ADD PHOTO</Text>
+                            </TouchableOpacity>     
+                        </View> 
+                              
                         </View> 
 
                     }
@@ -259,3 +266,5 @@ const styles = StyleSheet.create({
         fontFamily: 'Barlow-Bold'
     }
 });
+
+export default PhotosScreen;

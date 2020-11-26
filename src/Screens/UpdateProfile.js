@@ -7,48 +7,66 @@ import {
   TextInput,
   View,
   ScrollView,
-  Image,
-  Keyboard,
   TouchableOpacity,
   KeyboardAvoidingView,
 } from 'react-native';
 import { 
   Avatar, 
-  Title, 
-  Caption, 
-  Paragraph, 
-  Drawer, 
   Text, 
-  TouchableRipple,
-  Switch
 } from 'react-native-paper';
 
 import Loader from '../components/Loader';
 import * as api from '../services/api';
 import { useAuth } from '../provider';
 import FooterHome from '../components/FooterHome';
+import ImagePicker from 'react-native-image-picker';
 
 export default function UpdateProfile() {
-  let [userEmail, setUserEmail] = useState('');
-  let [firstName, setFirstName] = useState('');
+  let [email, setEmail] = useState('');
+  let [firstNames, setFirstName] = useState('');
   let [lastName, setLastName] = useState('');
-  let [userPassword, setUserPassword] = useState('');
+  let [phoneNumber, setPhoneNumber] = useState('');
+  let [portrait, setPortrait] = useState(null);
   let [loading, setLoading] = useState(false);
   let [errortext, setErrortext] = useState('');
-  
+
   const {state, setState} = useAuth();
   const user = state.user;
   
-  let user_portrait_p = false;
-  if (user) {
+  if (user || portrait) {
       if (user.portrait_url != ''){
-          user_portrait_p = true;
+        setPortrait(user.portrait_url);
       }
   }
+
+  function handleChoosePortrait() {
+    const options = {
+        //noData: true,
+        maxHeight: 500,
+        maxWidth: 500
+    };    //alert('clicked');
+
+    ImagePicker.showImagePicker(options, (response) => {
+        // console.log('Response = ', response);
+
+        if (response.didCancel) {
+            console.log('User cancelled image picker');
+        } else if (response.error) {
+            console.log('Image Picker Error: ', response.error);
+        } else {
+          // You can also display the image using data:
+          // let source = { uri: 'data:image/jpeg;base64,' + response.data };
+          setPortrait(response);
+        }
+    });
+  }
+
+
+
   async function handleSubmitPress() {    
     try {
       setErrortext('');      
-      if (!firstName) {
+      if (!firstNames) {
         alert('Please fill first names');
         return;
       }  
@@ -56,17 +74,17 @@ export default function UpdateProfile() {
         alert('Please fill last name');
         return;
       }  
-      if (!userEmail) {
+      if (!email) {
         alert('Please fill Email');
         return;
       }
-      if (!userPassword) {
+      if (!phoneNumber) {
         alert('Please fill Password');
         return;
       }  
 
       setLoading(true);  
-      let response = await api.updateProfile({firstName: firstName, lastName: lastName, email: userEmail, password: userPassword});
+      let response = await api.updateProfile({firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, portrait: portrait});
       await handleLogin(response);
 
       //Hide Loader
@@ -88,41 +106,44 @@ export default function UpdateProfile() {
         <View style={{ marginTop: 20 }}>
           <KeyboardAvoidingView enabled>
             <View style={{alignItems: 'center'}}>
-                {user_portrait_p == true 
-                  ?   <Avatar.Image
-                      source={{ uri: user.portrait_url }}
-                      size={100}/>
-                  :   <Avatar.Image
+                {portrait 
+                  ? <Avatar.Image
+                      source={{ uri: portrait.uri }}
+                      size={200}/>
+                  : <TouchableOpacity
+                      style={{alignItems: 'center'}}
+                      onPress={handleChoosePortrait}>
+                      <Avatar.Image
                           source={require('../assets/images/add-user.png')}
                           style={{backgroundColor: '#ffffff'}}
                           size={100}/>
-  
+                  </TouchableOpacity>
                 }
             </View>
             <View style={styles.SectionStyle}>
               <TextInput
                 style={styles.inputStyle}
-                onChangeText={FirstName => setFirstName(FirstName)}
+                onChangeText={firstNames => setFirstName(firstNames)}
                 underlineColorAndroid="#282d84"
                 placeholder="Enter first names"
                 placeholderTextColor="#282d84"
                 autoCapitalize="none"
                 keyboardType="name-phone-pad"
                 ref={ref => {
-                  this._firstnameinput = ref;
+                  this._firstnamesinput = ref;
                 }}
                 returnKeyType="next"
                 onSubmitEditing={() =>
                   this._lastnameinput && this._lastnameinput.focus()
                 }
                 blurOnSubmit={false}
-                value={user.firstName}
+                value={user.firstNames}
               />
             </View>
             <View style={styles.SectionStyle}>
               <TextInput
                 style={styles.inputStyle}
-                onChangeText={LastName => setLastName(LastName)}
+                onChangeText={lastName => setLastName(lastName)}
                 underlineColorAndroid="#282d84"
                 placeholder="Enter last name"
                 placeholderTextColor="#282d84"
@@ -133,17 +154,36 @@ export default function UpdateProfile() {
                 }}
                 returnKeyType="next"
                 onSubmitEditing={() =>
-                  this._emailinput && this._emailinput.focus()
+                  this._phonenumberinput && this._phonenumberinput.focus()
                 }
                 blurOnSubmit={false}
                 value={user.lastName}
               />
             </View>
-
             <View style={styles.SectionStyle}>
               <TextInput
                 style={styles.inputStyle}
-                onChangeText={UserEmail => setUserEmail(UserEmail)}
+                onChangeText={phoneNumber => setPhoneNumber(phoneNumber)}
+                underlineColorAndroid="#282d84"
+                placeholder="Enter phone number"
+                placeholderTextColor="#282d84"
+                autoCapitalize="none"
+                keyboardType="phone-pad"
+                ref={ref => {
+                  this._phonenumberinput = ref;
+                }}
+                returnKeyType="next"
+                onSubmitEditing={() =>
+                  this._emailinput && this._emailinput.focus()
+                }
+                blurOnSubmit={false}
+                value={user.phoneNumber}
+              />
+            </View>
+            <View style={styles.SectionStyle}>
+              <TextInput
+                style={styles.inputStyle}
+                onChangeText={email => setEmail(email)}
                 underlineColorAndroid="#282d84"
                 placeholder="Enter Email" //dummy@abc.com
                 placeholderTextColor="#282d84"
@@ -160,22 +200,6 @@ export default function UpdateProfile() {
                 value={user.email}
               />
             </View>
-            <View style={styles.SectionStyle}>
-              <TextInput
-                style={styles.inputStyle}
-                onChangeText={UserPassword => setUserPassword(UserPassword)}
-                underlineColorAndroid="#282d84"
-                placeholder="Enter new password" //12345
-                placeholderTextColor="#282d84"
-                keyboardType="default"
-                ref={ref => {
-                  this._passwordinput = ref;
-                }}
-                onSubmitEditing={Keyboard.dismiss}
-                blurOnSubmit={false}
-                secureTextEntry={true}
-              />
-            </View>
             {errortext != '' ? (
               <Text style={styles.errorTextStyle}> {errortext} </Text>
             ) : null}
@@ -184,8 +208,7 @@ export default function UpdateProfile() {
               activeOpacity={0.5}
               onPress={handleSubmitPress}>
               <Text style={styles.buttonTextStyle}>UPDATE</Text>
-            </TouchableOpacity>
-            
+            </TouchableOpacity>            
           </KeyboardAvoidingView>
         </View>
         <FooterHome/>

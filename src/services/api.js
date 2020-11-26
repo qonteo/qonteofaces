@@ -1,10 +1,10 @@
 import axios from 'axios';
 import * as c from '../constants';
 
-export async function uploadPhoto(data){
+export async function deletePhoto(data){
     try{
         console.log({data});
-        let res = await axios.post(c.UPLOAD_PHOTO, data);
+        let res = await axios.post(c.DELETE_PHOTO, data);
         return res.data;
     }catch (e) {
         throw handler(e)
@@ -12,6 +12,9 @@ export async function uploadPhoto(data){
 }
 
 export async function updateProfile(userId, data){
+    console.log("Running function updateProfile...");
+    console.log({data});
+
     try{
         const options = {
             headers: {
