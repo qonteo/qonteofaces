@@ -61,6 +61,7 @@ const PhotoDetails = (props) => {
         uri: props.route.params.item.uri
     } 
 
+    console.log(item.description);
     return (
         <>
             <SafeAreaView>
@@ -80,9 +81,15 @@ const PhotoDetails = (props) => {
                                                 {parseFloat(item.description.Confidence).toFixed(2)}%
                                             </Text>                                                
                                             <Text style={styles.textStyle}>
-                                                <Text style={styles.labelTextStyle}>Name:</Text>                           
-                                                <Text style={styles.labelTextStyle}>{item.description.Name}</Text>
-                                            </Text>                                                
+                                                <Text style={styles.labelTextStyle}>Name:</Text>
+                                                <Text style={styles.textStyle}>{item.description.Name}</Text>
+                                            </Text>
+                                            <Text style={styles.labelTextStyle}>Identified Elements:</Text>
+                                            <Text style={styles.labelTextStyle}>{item.description.Parents.map(
+                                                    (e) => <View key={e.Name} style={{with: '33%'}}><Text key={e.Name} style={styles.textStyle}>
+                                                        {e.Name}</Text></View>
+                                                    )}                                     
+                                            </Text>
                                         </View>
                                         : <View style={styles.secondaryContainer}>
                                             <Text style={styles.textStyle}>

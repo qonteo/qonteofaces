@@ -5,9 +5,10 @@ import {
   SafeAreaView,
   StyleSheet,
   View,
-  Text
+  Text, 
+  TouchableOpacity
 } from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+
 
 import FooterHome from '../components/FooterHome';
 
@@ -22,25 +23,20 @@ export default function HomeScreen ({ navigation }) {
   return (
     <>
       <SafeAreaView>
-        <View>
-          <View style={styles.container}>
-            {user
-              ? <View style={{marginLeft: 15, flexDirection: 'column'}}>
-                  <Text style={{fontFamily: 'Barlow-Bold', fontSize: 20}}>Welcome {user.firstNames}! </Text>
-              </View>
-              : <View></View>
-            }
-            <View style={styles.Button1}>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('Photos')}>                
-                  <View>
-                    <Text style={styles.buttonText}>Photos</Text>
-                  </View>
-              </TouchableOpacity>
-            </View>                                    
-          </View>
-          <FooterHome/>
+        <View style={styles.container}>
+          {user
+            ? <View style={{marginLeft: 15}}>
+                <Text style={{fontFamily: 'Barlow-Bold', fontSize: 20}}>Welcome {user.firstNames}! </Text>
+            </View>
+            : <View></View>
+          }
+          <TouchableOpacity style={styles.Button1}
+              onPress={() => navigation.navigate('Photos')}>                
+              <Text style={styles.buttonText}>Photos</Text>  
+          </TouchableOpacity>               
+          
         </View>
+        <FooterHome/>
       </SafeAreaView>
     </>
   );
@@ -58,8 +54,6 @@ const styles = StyleSheet.create({
     height: 100,
     alignItems: "center",
     borderRadius: 12,
-    marginTop:'50%',
-    padding: 30 
   },
   Button2: {
     backgroundColor: "#7033AD",
@@ -72,7 +66,8 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#FFFFFF", 
     fontFamily: "Barlow-Bold",
-    fontSize: 24,    
+    fontSize: 24,
+    marginVertical: 30    
   },
 });
 

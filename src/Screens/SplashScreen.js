@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   },
   footer_text: {
     color:'#FFFFFF',
-    fontFamily: 'Barlow-Bold',
+    fontFamily: 'Barlow',
     fontSize: 20,
     paddingVertical: 10,
   },

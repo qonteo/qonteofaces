@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 
 //Import all required component
 import {
+  Alert,
   StyleSheet,
   TextInput,
   View,
@@ -52,10 +53,17 @@ const SignInScreen = ({navigation}) => {
       setLoading(true);  
       let response = await api.register({firstName: firstName, lastName: lastName, email: userEmail, password: userPassword});
       await handleLogin(response);
-
       //Hide Loader
       setLoading(false);
-      navigation.navigate('Home'); 
+      Alert.alert(
+        'Registration Successful!',
+        response.message,
+        [{text: 'OK', onPress: () => navigation.navigate('Home') }],
+        {cancelable: false}
+      );
+      
+      
+      
     } catch(error) {
       console.log(error);
       setLoading(false);

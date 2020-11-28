@@ -16,7 +16,7 @@ export default function Logout({ navigation }) {
           //If not then send for Authentication
           //else send to Home Screen
           initialize();
-        }, 2000);
+        }, 4000);
       }, []);
       
 
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     },
     footer_text: {
       color:'#FFFFFF',
-      fontFamily: 'Barlow-Bold',
+      fontFamily: 'Barlow',
       fontSize: 20,
       paddingVertical: 10,
     },
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
       color:'#FFFFFF',
       fontFamily: 'Rotters',
       fontSize: 36,
-      paddingVertical: 10,
+      paddingVertical: 5,
     },
     slogan2_text: {
       color:'#FFFFFF',

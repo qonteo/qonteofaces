@@ -18,8 +18,6 @@ export default function Footer() {
 
 const styles = StyleSheet.create({
     bottom: {
-        width: '100%',    
-        height: '90%',   
         alignItems: 'center',
         justifyContent: 'flex-end',
         marginBottom: 0,

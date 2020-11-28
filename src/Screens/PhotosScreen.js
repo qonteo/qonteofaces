@@ -1,17 +1,28 @@
 import React, { useState } from 'react';
-import { KeyboardAvoidingView, Keyboard, SafeAreaView, View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { 
+    Alert, 
+    KeyboardAvoidingView,
+    Keyboard, 
+    SafeAreaView, 
+    View,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    Image, 
+    StyleSheet } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 // import axios from 'axios';
 import RNFetchBlob from 'rn-fetch-blob';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ListPhotos from '../components/ListPhotos';
 import { useAuth } from '../provider';
-
+import Loader from '../components/Loader';
 
 const PhotosScreen: () => React$Node = ({ navigation }) => {
     const {state, setState} = useAuth();
     let [photo, setPhoto] = useState(null);
     let [photoName, setPhotoName] = useState(null);
+    let [loading, setLoading] = useState(false);
     const user = state.user;
     
     function handleChoosePhoto() {
@@ -38,6 +49,7 @@ const PhotosScreen: () => React$Node = ({ navigation }) => {
 
     async function onSubmit() {
         //console.log("USER ", user);
+        setLoading(true);
         const realPath = Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri;
         //console.log("NAME ", photoName);
         //console.log("DESC ", photo.uri.substring(photo.uri.lastIndexOf('/')+1));
@@ -126,74 +138,83 @@ const PhotosScreen: () => React$Node = ({ navigation }) => {
                 type: 'application/json',
             }
         ]).then((resp) => {
-            alert('Success! Your image uploaded successfully');         
             setPhoto(null);
-            navigation.navigate('Photos');
+            setLoading(false);   
+
+            Alert.alert(
+                'Success!',
+                'Your image uploaded successfully',
+                [{text: 'OK', onPress: () => navigation.navigate('Photos')}],
+                {cancelable: false},
+            );
         }).catch((error) => {
             //console.log(error);
         });                
     }
 
     return (
-        <View style={styles.mainBody}>     
-            <KeyboardAvoidingView enabled>
-                <View style={styles.container}>      
-                    {photo ?
-                        <View>
-                            <TouchableOpacity
-                                style={{alignItems: 'center'}}
-                                onPress={handleChoosePhoto}>
-                                <Text style={styles.screenTitleStyle}> ADD PHOTO </Text>                                        
-                                <Image
-                                    source={{
-                                    uri: photo.uri
-                                    }}
-                                    resizeMode='cover'
-                                    style={styles.formImageDisplay} />                          
-                            </TouchableOpacity>
-                            
-                            <TextInput
-                                style={styles.inputStyle}
-                                onChangeText={photoName => setPhotoName(photoName)}
-                                underlineColorAndroid="#FFFFFF"
-                                placeholder="Type a subtitle for the photo"
-                                placeholderTextColor="#282d84"
-                                onSubmitEditing={Keyboard.dismiss}
-                            />
-                            <TouchableOpacity
-                                style={styles.buttonStyle}
-                                activeOpacity={0.5}
-                                onPress={onSubmit}>
-                                <Text style={styles.buttonTextStyle}>Ok</Text>
-                            </TouchableOpacity>
-                        
-                        </View>
-                    :   <View style={styles.container} >                           
-                            <ListPhotos {...user} navigation={navigation} />
-
-                          
-
-                            <View style={{flexDirection: 'row'}}>
-                                <TouchableOpacity 
-                                    style={{ marginRight: 30, alignItems: 'center'}}
-                                    onPress={() => navigation.goBack()}>
-                                    <Icon name="keyboard-return" size={80} color="#282d84" />
-                                    <Text style={{fontFamily: 'Barlow-Bold', fontSize: 18, paddingTop: 10, color: '#282d84'}}>RETURN</Text>
+        <>
+            <View style={styles.mainBody}> 
+                <Loader loading={loading} />    
+                <KeyboardAvoidingView enabled>
+                    <View style={styles.container}>      
+                        {photo ?
+                            <View>
+                                <TouchableOpacity
+                                    style={{alignItems: 'center'}}
+                                    onPress={handleChoosePhoto}>
+                                    <Text style={styles.screenTitleStyle}> ADD PHOTO </Text>                                        
+                                    <Image
+                                        source={{
+                                        uri: photo.uri
+                                        }}
+                                        resizeMode='cover'
+                                        style={styles.formImageDisplay} />                          
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={handleChoosePhoto}>
-                                <View style={styles.buttonPlusViewStyle}>                
-                                    <Text style={styles.buttonPlusTextStyle}>+</Text>
-                                </View>
-                                <Text style={{fontFamily: 'Barlow-Bold', fontSize: 18, color: '#282d84'}}>ADD PHOTO</Text>
-                            </TouchableOpacity>     
-                        </View> 
-                              
-                        </View> 
+                                
+                                <TextInput
+                                    style={styles.inputStyle}
+                                    onChangeText={photoName => setPhotoName(photoName)}
+                                    underlineColorAndroid="#FFFFFF"
+                                    placeholder="Type a subtitle for the photo"
+                                    placeholderTextColor="#282d84"
+                                    onSubmitEditing={Keyboard.dismiss}
+                                />
+                                <TouchableOpacity
+                                    style={styles.buttonStyle}
+                                    activeOpacity={0.5}
+                                    onPress={onSubmit}>
+                                    <Text style={styles.buttonTextStyle}>Ok</Text>
+                                </TouchableOpacity>
+                            
+                            </View>
+                        :   <View style={styles.container} >                           
+                                <ListPhotos {...user} navigation={navigation} />
 
-                    }
-                </View>
-            </KeyboardAvoidingView>  
-        </View>
+                            
+
+                                <View style={{flexDirection: 'row'}}>
+                                    <TouchableOpacity 
+                                        style={{ marginRight: 30, alignItems: 'center'}}
+                                        onPress={() => navigation.goBack()}>
+                                        <Icon name="keyboard-return" size={80} color="#282d84" />
+                                        <Text style={{fontFamily: 'Barlow-Bold', fontSize: 18, paddingTop: 10, color: '#282d84'}}>RETURN</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={handleChoosePhoto}>
+                                    <View style={styles.buttonPlusViewStyle}>                
+                                        <Text style={styles.buttonPlusTextStyle}>+</Text>
+                                    </View>
+                                    <Text style={{fontFamily: 'Barlow-Bold', fontSize: 18, color: '#282d84'}}>ADD PHOTO</Text>
+                                </TouchableOpacity>     
+                            </View> 
+                                
+                            </View> 
+
+                        }
+                    </View>
+                </KeyboardAvoidingView>  
+            </View>
+        </>
     );
 }
 
