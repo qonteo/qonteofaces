@@ -1,5 +1,3 @@
-/* This is an Login Registration example from https://aboutreact.com/ */
-/* https://aboutreact.com/react-native-login-and-signup/ */
 
 //Import React and Hook we needed
 import React, { useState } from 'react';
@@ -8,7 +6,6 @@ import React, { useState } from 'react';
 import {
   StyleSheet,
   TextInput,
-  StatusBar,
   View,
   Text,
   ScrollView,
@@ -17,87 +14,71 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
 } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
-import Loader from '../Components/Loader';
-import Footer from '../Components/Footer';
+import Loader from '../components/Loader';
+import Footer from '../components/Footer';
 
-const LoginScreen = props => {
+import * as api from '../services/auth';
+import { useAuth } from '../provider'; 
+
+const SignInScreen: () => React$Node = ({navigation}) => {
   let [userEmail, setUserEmail] = useState('');
   let [userPassword, setUserPassword] = useState('');
   let [loading, setLoading] = useState(false);
   let [errortext, setErrortext] = useState('');
-
-  const handleSubmitPress = () => {
-    setErrortext('');
-    if (!userEmail) {
-      alert('Please fill Email');
-      return;
-    }
-    if (!userPassword) {
-      alert('Please fill Password');
-      return;
-    }
-    setLoading(true);
-    var dataToSend = { user_email: userEmail, user_password: userPassword };
-    var formBody = [];
-    for (var key in dataToSend) {
-      var encodedKey = encodeURIComponent(key);
-      var encodedValue = encodeURIComponent(dataToSend[key]);
-      formBody.push(encodedKey + '=' + encodedValue);
-    }
-    formBody = formBody.join('&');
-
-    fetch('https://aboutreact.herokuapp.com/login.php', {
-      method: 'POST',
-      body: formBody,
-      headers: {
-        //Header Defination
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-      },
-    }).then(response => response.json())
-      .then(responseJson => {
-        //Hide Loader
+  const { handleLogin } = useAuth();       
+       
+  async function handleSubmitPress() {    
+    try {
+      setErrortext('');      
+      if (!userEmail) {
+        alert('Please fill Email');
+        return;
+      }
+      if (!userPassword) {
+        alert('Please fill Password');
+        return;
+      }  
+      setLoading(true);
+      let response = await api.login({email: userEmail, password: userPassword});
+      await handleLogin(response);
+      
+      // If server response message same as Data Matched
+      if (response.user.isVerified == 't') {
         setLoading(false);
-        console.log(responseJson);
-        // If server response message same as Data Matched
-        if (responseJson.status == 1) {
-          AsyncStorage.setItem('user_id', responseJson.data[0].user_id);
-          console.log(responseJson.data[0].user_id);
-          props.navigation.navigate('DrawerNavigationRoutes');
-        } else {
-          setErrortext('Please check your email id or password');
-          console.log('Please check your email id or password');
-        }
-      })
-      .catch(error => {
-        //Hide Loader
+        navigation.navigate('Home'); 
+      } else {
         setLoading(false);
-        console.error(error);
-      });
+        setErrortext('Please check your email id or password');
+        console.log('Please check your email id or password');
+      }
+      //Hide Loader
+      setLoading(false);
+    } catch(error) {
+      console.log(error);
+      setLoading(false);
+      setErrortext('Please check your email id or password');
+      throw new Error(error);
+    }
   };
 
   return (
-    <View style={styles.mainBody}>
-      <StatusBar
-        backgroundColor='#292d83'
-        color='#effbf7'
-        barStyle="light-content"
-      />
+    <View style={styles.mainBody}>     
       <Loader loading={loading} />
 
       <ScrollView keyboardShouldPersistTaps="handled">
-        <View style={{ marginTop: 100 }}>
+        <View style={{ marginTop: 80 }}>
           <KeyboardAvoidingView enabled>
             <View style={{ alignItems: 'center' }}>
               <Image
                 source={require('../assets/images/logo-qonteo-white-200.png')}
                 style={{
-                  width: '50%',
-                  height: 100,
+                  width: '70%',
+                  height: 120,
                   resizeMode: 'contain',
-                  margin: 30,
+                  margin: 0,
                 }}
               />
+              <Text style={styles.imageTextStyle}>Faces</Text>       
             </View>
             <View style={styles.SectionStyle}>
               <TextInput
@@ -143,9 +124,23 @@ const LoginScreen = props => {
               onPress={handleSubmitPress}>
               <Text style={styles.buttonTextStyle}>LOGIN</Text>
             </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.buttonStyle}
+              activeOpacity={0.5}
+              onPress={navigation.navigate('FaceLogin')}>
+              <Text style={styles.buttonTextStyle}>FACE LOGIN</Text>
+            </TouchableOpacity>
+
+            <Text
+              style={styles.forgotPasswordTextStyle}
+              onPress={() => navigation.navigate('ForgotPassword')}>
+              Forgot you Password?
+            </Text>
+
+
             <Text
               style={styles.registerTextStyle}
-              onPress={() => props.navigation.navigate('RegisterScreen')}>
+              onPress={() => navigation.navigate('Register')}>
               New Here ? Register
             </Text>
             <Footer/>
@@ -156,7 +151,7 @@ const LoginScreen = props => {
     </View>
   );
 };
-export default LoginScreen;
+
 
 const styles = StyleSheet.create({
   mainBody: {
@@ -173,41 +168,68 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   buttonStyle: {
+    height: 60,
     backgroundColor: '#7DE24E',
     borderWidth: 0,
     color: '#FFFFFF',
     borderColor: '#7DE24E',
-    height: 40,
     alignItems: 'center',
-    borderRadius: 30,
-    marginLeft: 35,
-    marginRight: 35,
-    marginTop: 20,
+    borderRadius: 20,
+    marginHorizontal: 35,
+    marginTop: 40,
     marginBottom: 20,
   },
   buttonTextStyle: {
     color: '#FFFFFF',
-    paddingVertical: 10,
-    fontSize: 16,
+    alignItems: 'center',
+    paddingVertical: 20,
+    fontFamily: 'Barlow-Bold',
+    fontSize: 20,
   },
   inputStyle: {
+    height: 60,
     flex: 1,
     color: 'white',
     paddingLeft: 15,
     paddingRight: 15,
     borderWidth: 1,
-    borderRadius: 30,
+    borderRadius: 20,
     borderColor: 'white',
+    fontSize: 18,
+    fontFamily: 'Barlow-Regular'
   },
+  forgotPasswordTextStyle: {
+    marginTop: 20,
+    color: '#FFFFFF',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 18,
+    fontFamily: 'Barlow-Bold'
+
+  },
+
   registerTextStyle: {
     color: '#FFFFFF',
     textAlign: 'center',
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: 20,
+    fontFamily: 'Barlow-Bold',
+    marginTop: 40,
   },
   errorTextStyle: {
-    color: 'red',
+    color: '#FF64B4',
     textAlign: 'center',
-    fontSize: 14,
+    marginVertical: 20,
+    fontSize: 16,
+    fontFamily: 'Barlow-Bold'
   },
+  imageTextStyle: {
+      color:'#FFFFFF',
+      fontFamily: 'Rotters',
+      fontSize: 42,
+      paddingVertical: 10,
+    },
 });
+
+
+export default SignInScreen;

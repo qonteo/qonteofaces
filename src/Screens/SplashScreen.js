@@ -1,16 +1,15 @@
-/* This is an Login Registration example from https://aboutreact.com/ */
-/* https://aboutreact.com/react-native-login-and-signup/ */
 
 //Import React and Hooks we needed
 import React, { useState, useEffect } from 'react';
 
 //Import all required component
 import { ActivityIndicator, View, StyleSheet, Image, Text } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import AuthProvider, { useAuth } from "../provider";
 
-const SplashScreen = props => {
+export default function SplashScreen({ navigation }) {
   //State for ActivityIndicator animation
   let [animating, setAnimating] = useState(true);
+  const { getAuthState } = useAuth();
 
   useEffect(() => {
     setTimeout(() => {
@@ -18,34 +17,52 @@ const SplashScreen = props => {
       //Check if user_id is set or not
       //If not then send for Authentication
       //else send to Home Screen
-      AsyncStorage.getItem('user_id').then(value =>
+      initialize();
+      {/*AsyncStorage.getItem('user_id').then(value =>
         props.navigation.navigate(
           value === null ? 'Auth' : 'DrawerNavigationRoutes'
         )
-      );
+        );*/}
+
     }, 5000);
   }, []);
 
-  return (
-    <View style={styles.container}>
-      <Image
-        source={require('../assets/images/logo-qonteo-white-200.png')}
-        style={{ width: '90%', resizeMode: 'contain', margin: 30 }}
-      />
-      <Text style={styles.slogan_text}>Biometric is everything</Text>
-      <ActivityIndicator
-        animating={animating}
-        color="#FFFFFF"
-        size="large"
-        style={styles.activityIndicator}
-      />
-      <Text style={styles.footer_text}>Powered by Asdf Network Latam SAS. </Text>
-      <Text style={styles.footer_text}>@2020 Copyright</Text>
-   
-    </View>
+
+  async function initialize() {
+    try {
+        const {user} = await getAuthState();
+        if (user) {
+          if (user.isVerified == 't') navigation.navigate('Home');
+          else navigation.navigate('Login'); //navigate('Auth', {}, StackActions.replace({ routeName: "Username" }))
+        } else navigation.navigate('Login');
+    } catch (e) {
+        navigation.navigate('Login');
+    }
+}
+
+
+  return (   
+    <AuthProvider>
+      <View style={styles.container}>
+        <Image
+          source={require('../assets/images/logo-qonteo-white-200.png')}
+          style={{ width: '90%', resizeMode: 'contain', margin: 30 }}
+        />
+        <Text style={styles.slogan1_text}>Faces</Text> 
+        <Text style={styles.slogan2_text}>Biometric is everything</Text>
+        <ActivityIndicator
+          animating={animating}
+          color="#FFFFFF"
+          size="large"
+          style={styles.activityIndicator}
+        />
+        <Text style={styles.footer_text}>Powered by Asdf Network Latam SAS. </Text>
+        <Text style={styles.footer_text}>@2020 Copyright</Text>    
+      </View>
+    </AuthProvider> 
   );
 };
-export default SplashScreen;
+
 
 const styles = StyleSheet.create({
   container: {
@@ -60,11 +77,17 @@ const styles = StyleSheet.create({
   },
   footer_text: {
     color:'#FFFFFF',
-    fontFamily: 'Barlow-Bold',
+    fontFamily: 'Barlow',
     fontSize: 20,
     paddingVertical: 10,
   },
-  slogan_text: {
+  slogan1_text: {
+    color:'#FFFFFF',
+    fontFamily: 'Rotters',
+    fontSize: 36,
+    paddingVertical: 10,
+  },
+  slogan2_text: {
     color:'#FFFFFF',
     fontFamily: 'Rotters',
     fontSize: 42,
