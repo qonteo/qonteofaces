@@ -5,7 +5,10 @@ const MainStack = createStackNavigator();
 
 import SplashScreen from '../screens/SplashScreen';
 import LoginScreen from '../screens/Login';
+<<<<<<< HEAD
 import FaceLoginScreen from '../screens/FaceLogin';
+=======
+>>>>>>> 38caee1e5522f296555ac553d307feb2da9593fc
 import RegisterScreen from '../screens/Register';
 import ForgotPasswordScreen from '../screens/ForgotPassword';
 import DrawerRoutes from './DrawerRoutes';

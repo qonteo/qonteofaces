@@ -130,7 +130,6 @@ const SignInScreen: () => React$Node = ({navigation}) => {
               onPress={navigation.navigate('FaceLogin')}>
               <Text style={styles.buttonTextStyle}>FACE LOGIN</Text>
             </TouchableOpacity>
-
             <Text
               style={styles.forgotPasswordTextStyle}
               onPress={() => navigation.navigate('ForgotPassword')}>
