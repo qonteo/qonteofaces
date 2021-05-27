@@ -12,11 +12,21 @@ export async function register(data){
 }
 
 export async function login(data){
+    //console.log(data);
     try{
         let res = await axios.post(c.LOGIN, data);
         console.log({res});
         
         return res.data;
+    }catch (e) {
+        throw handler(e);
+    }
+}
+
+export async function facelogin(photo){
+    try{
+      //  let res = await axios.post(c.FACE_LOGIN, photo);
+      //  return res.data;            
     }catch (e) {
         throw handler(e);
     }
@@ -35,7 +45,7 @@ export async function forgotPassword(data) {
 
 export async function logout(data){
     try{
-        console.log("LOGOTU");
+        console.log("LOGOUT");
         let res = await axios.post(c.LOGOUT, data);
         console.log({res});
         
@@ -44,6 +54,9 @@ export async function logout(data){
         throw handler(e);
     }
 }
+
+
+
 
 export function handler(err) {
     let error = err;

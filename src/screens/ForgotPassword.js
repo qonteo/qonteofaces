@@ -99,12 +99,12 @@ const SignInScreen: () => React$Node = ({navigation}) => {
             </TouchableOpacity>
             <Text
               style={styles.signInTextStyle}
-              onPress={() => navigation.navigate('Login')}>
+              onPress={() => navigation.navigate('FaceSignIn')}>
               Sign In!
             </Text>
            <View style={{marginTop: '11%', alignItems: 'center' }}>
            <Text style={{fontFamily: 'Barlow', color: '#FFFFFF',
-                    fontSize: 18}}>2020 Copyright Asdf Network Latam SAS.</Text>
+                    fontSize: 18}}>2021 Copyright Asdf Network Latam SAS.</Text>
                 <Text style={{fontFamily: 'Barlow', color: '#FFFFFF',
                     fontSize: 18}}>All rights reserved.</Text>
            </View>

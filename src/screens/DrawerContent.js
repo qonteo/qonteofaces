@@ -78,7 +78,7 @@ export function DrawerContent(props) {
                             )}
                             label="Home"
                             onPress={() => {props.navigation.navigate('Home')}}/>
-                        <DrawerItem
+                        {/*<DrawerItem
                             icon={({color, size}) => (
                                 <Icon
                                     name="camera"
@@ -88,7 +88,7 @@ export function DrawerContent(props) {
                             )}
                             label="Photos"
                             onPress={() => {props.navigation.navigate('Photos')}}/>
-                        {/*<DrawerItem
+                        <DrawerItem
                             icon={({color, size}) => (
                                 <Icon
                                     name="video-vintage"
@@ -130,7 +130,7 @@ export function DrawerContent(props) {
                         size={size}/>
                     )}
                     label="Sign Out"
-                    onPress={() => {props.navigation.navigate('Logout')}}
+                    onPress={() => {props.navigation.navigate('SignOut')}}
                 />
             </Drawer.Section>
         </View>

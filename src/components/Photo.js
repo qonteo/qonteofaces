@@ -4,8 +4,8 @@ import { TouchableOpacity, Text, View, Image, StyleSheet } from 'react-native';
 
 
 //Define your stateless componetns, and destrcuts props from function arguments
-const Photo = ({id, name, description, url, navigation}) => {
 
+export default function Photo ({id, name, description, url, navigation}) {
     const item = {
         id: id,
         name: name,
@@ -49,7 +49,5 @@ styles = StyleSheet.create({
         backgroundColor: 'transparent',
         height: 120,
         width: 120
-    },
-
-})
-export default Photo;
+    }
+});

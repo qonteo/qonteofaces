@@ -32,11 +32,13 @@ export default function SplashScreen({ navigation }) {
     try {
         const {user} = await getAuthState();
         if (user) {
-          if (user.isVerified == 't') navigation.navigate('Home');
-          else navigation.navigate('Login'); //navigate('Auth', {}, StackActions.replace({ routeName: "Username" }))
-        } else navigation.navigate('Login');
+          if (user.isVerified == 't') {
+            navigation.navigate('Home');
+          }
+        }  
+        navigation.navigate('FaceSignIn');
     } catch (e) {
-        navigation.navigate('Login');
+        navigation.navigate('FaceSignIn');
     }
 }
 
@@ -48,7 +50,6 @@ export default function SplashScreen({ navigation }) {
           source={require('../assets/images/logo-qonteo-white-200.png')}
           style={{ width: '90%', resizeMode: 'contain', margin: 30 }}
         />
-        <Text style={styles.slogan1_text}>Faces</Text> 
         <Text style={styles.slogan2_text}>Biometric is everything</Text>
         <ActivityIndicator
           animating={animating}

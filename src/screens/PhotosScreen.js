@@ -18,7 +18,7 @@ import ListPhotos from '../components/ListPhotos';
 import { useAuth } from '../provider';
 import Loader from '../components/Loader';
 
-const PhotosScreen: () => React$Node = ({ navigation }) => {
+export default function PhotosScreen ({ navigation }) {
     const {state, setState} = useAuth();
     let [photo, setPhoto] = useState(null);
     let [photoName, setPhotoName] = useState(null);
@@ -288,4 +288,3 @@ const styles = StyleSheet.create({
     }
 });
 
-export default PhotosScreen;

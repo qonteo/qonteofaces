@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as api from '../services/api';
 import { useAuth } from '../provider'; 
 
-const PhotoDetails = (props) => {
+export default function PhotoDetails (props) {
     //console.log("NAV ", navigation);
     let [loading, setLoading] = React.useState(false);
     let [errortext, setErrortext] = React.useState('');
@@ -247,4 +247,3 @@ const styles = StyleSheet.create({
 });
 
 
-export default PhotoDetails;

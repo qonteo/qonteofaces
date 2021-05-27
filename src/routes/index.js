@@ -4,9 +4,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 const MainStack = createStackNavigator();
 
 import SplashScreen from '../screens/SplashScreen';
-import LoginScreen from '../screens/Login';
-import FaceLoginScreen from '../screens/FaceLogin';
-import RegisterScreen from '../screens/Register';
+import SignInScreen from '../screens/SignIn';
+import FaceSignInScreen from '../screens/FaceSignIn';
+import SignUpScreen from '../screens/SignUp';
 import ForgotPasswordScreen from '../screens/ForgotPassword';
 import DrawerRoutes from './DrawerRoutes';
 
@@ -27,14 +27,14 @@ export default function Routes({ navigation }) {
                     <MainStack.Screen name="SplashScreen"
                         component={SplashScreen}
                         options={{headerShown:false}}/>
-                    <MainStack.Screen name="Login"
-                        component={LoginScreen}
+                    <MainStack.Screen name="SignIn"
+                        component={SignInScreen}
                         options={{headerShown:false}}/>
-                    <MainStack.Screen name="FaceLogin"
-                        component={FaceLoginScreen}
+                    <MainStack.Screen name="FaceSignIn"
+                        component={FaceSignInScreen}
                         options={{headerShown:false}}/>
-                    <MainStack.Screen name="Register"
-                        component={RegisterScreen}
+                    <MainStack.Screen name="SignUp"
+                        component={SignUpScreen}
                         options={{headerShown:false}}/>
                     <MainStack.Screen name="ForgotPassword"
                         component={ForgotPasswordScreen}

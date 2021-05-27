@@ -27,9 +27,9 @@ export default function Logout({ navigation }) {
             handleLogout();
             state.user = null;
             setState(null);
-            navigation.navigate('Login');
+            navigation.navigate('SignIn');
         } catch (e) {
-            navigation.navigate('Login');
+            navigation.navigate('SignOut');
         }
     }
     
@@ -52,10 +52,10 @@ export default function Logout({ navigation }) {
             />
             <Button title={"Log Out"} onPress={() => {
                             handleLogout();
-                            navigation.navigate('Login');
+                            navigation.navigate('SignIn');
             }}/>
             <Text style={styles.footer_text}>Powered by Asdf Network Latam SAS. </Text>
-            <Text style={styles.footer_text}>@2020 Copyright</Text>    
+            <Text style={styles.footer_text}>@2021 Copyright</Text>    
         </View>
     );
 };
